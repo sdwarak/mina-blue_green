@@ -25,6 +25,9 @@ Require `mina/blue_green` in your `config/deploy.rb`:
 ```rb
 require 'mina/blue_green'
 
+set :blue, '198.51.100.1' # Use an IP address
+set :green, 'example.com' # or domain name
+
 ...
 
 task setup: :environment do
