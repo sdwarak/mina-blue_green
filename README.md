@@ -1,6 +1,8 @@
 # Modules: BlueGreen
 
-Mina module for [Blue Green Deployment](http://martinfowler.com/bliki/BlueGreenDeployment.html).
+[![Gem Version](https://badge.fury.io/rb/mina-blue_green.svg)](https://badge.fury.io/rb/mina-blue_green)
+
+[Mina](https://github.com/mina-deploy/mina) module for [Blue Green Deployment](http://martinfowler.com/bliki/BlueGreenDeployment.html).
 
 ## Installation
 
@@ -43,10 +45,10 @@ end
 Then run:
 
 ```shell
-$ bundle exec mina blue_green
+$ bundle exec mina blue status
 ```
 
-To run a command on either blue or green:
+You can run commands on either blue or green:
 
 ```shell
 $ bundle exec mina green unicorn:start
@@ -58,7 +60,27 @@ Or:
 $ bundle exec mina blue deploy
 ```
 
-If you have `mina-multistage` installed then all commands will default to production environment.
+With `mina-multistage`:
+
+```shell
+$ bundle exec mina production green deploy
+```
+
+# Suggestions for use with AWS
+
+This requires two EC2 instances (blue and green) and two ELBs (production and staging). The production ELB's health check gets a healthy response when an instance is running in production. Likewise, the staging ELB points to an endpoint that only responds healthily when an instance is running in staging. In this way, by promoting an instance to production it will automatically go live. If no staging environment is needed, both blue and green can be run in production mode and the ELB will balance their load.
+
+# Switching environments
+
+If you're running unicorn you need to stop it first:
+
+```shell
+$ bundle exec mina blue unicorn:stop
+```
+
+```shell
+$ bundle exec mina staging blue deploy
+```
 
 ## Contributing
 
