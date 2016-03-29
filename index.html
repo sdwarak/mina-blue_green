@@ -22,7 +22,9 @@
       <h1>
 <a id="modules-bluegreen" class="anchor" href="#modules-bluegreen" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Modules: BlueGreen</h1>
 
-<p>Mina module for <a href="http://martinfowler.com/bliki/BlueGreenDeployment.html">Blue Green Deployment</a>.</p>
+<p><a href="https://badge.fury.io/rb/mina-blue_green"><img src="https://badge.fury.io/rb/mina-blue_green.svg" alt="Gem Version"></a></p>
+
+<p><a href="https://github.com/mina-deploy/mina">Mina</a> module for <a href="http://martinfowler.com/bliki/BlueGreenDeployment.html">Blue Green Deployment</a>.</p>
 
 <h2>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
@@ -64,9 +66,9 @@ task <span class="pl-c1">deploy:</span> <span class="pl-c1">:environment</span> 
 
 <p>Then run:</p>
 
-<div class="highlight highlight-source-shell"><pre>$ bundle <span class="pl-c1">exec</span> mina blue_green</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ bundle <span class="pl-c1">exec</span> mina blue status</pre></div>
 
-<p>To run a command on either blue or green:</p>
+<p>You can run commands on either blue or green:</p>
 
 <div class="highlight highlight-source-shell"><pre>$ bundle <span class="pl-c1">exec</span> mina green unicorn:start</pre></div>
 
@@ -74,7 +76,23 @@ task <span class="pl-c1">deploy:</span> <span class="pl-c1">:environment</span> 
 
 <div class="highlight highlight-source-shell"><pre>$ bundle <span class="pl-c1">exec</span> mina blue deploy</pre></div>
 
-<p>If you have <code>mina-multistage</code> installed then all commands will default to production environment.</p>
+<p>With <code>mina-multistage</code>:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ bundle <span class="pl-c1">exec</span> mina production green deploy</pre></div>
+
+<h1>
+<a id="suggestions-for-use-with-aws" class="anchor" href="#suggestions-for-use-with-aws" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Suggestions for use with AWS</h1>
+
+<p>This requires two EC2 instances (blue and green) and two ELBs (production and staging). The production ELB's health check gets a healthy response when an instance is running in production. Likewise, the staging ELB points to an endpoint that only responds healthily when an instance is running in staging. In this way, by promoting an instance to production it will automatically go live. If no staging environment is needed, both blue and green can be run in production mode and the ELB will balance their load.</p>
+
+<h1>
+<a id="switching-environments" class="anchor" href="#switching-environments" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Switching environments</h1>
+
+<p>If you're running unicorn you need to stop it first:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ bundle <span class="pl-c1">exec</span> mina blue unicorn:stop</pre></div>
+
+<div class="highlight highlight-source-shell"><pre>$ bundle <span class="pl-c1">exec</span> mina staging blue deploy</pre></div>
 
 <h2>
 <a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
